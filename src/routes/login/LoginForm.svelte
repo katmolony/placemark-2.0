@@ -1,23 +1,25 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import Message from "$lib/ui/Message.svelte";
-    import UserCredentials from "$lib/ui/UserCredentials.svelte";
-  
-    let email = "";
-    let password = "";
-    let message = "";
-  
-    async function login() {
-      const success = false;
-      if (success) {
-        goto("/donate");
-      } else {
-        email = "";
-        password = "";
-        message = "Invalid Credentials";
-      }
+  import { goto } from "$app/navigation";
+  import { currentSession } from "$lib/stores";
+  import Message from "$lib/ui/Message.svelte";
+  import UserCredentials from "$lib/ui/UserCredentials.svelte";
+
+  let email = "";
+  let password = "";
+  let message = "";
+
+  async function login() {
+    const success = true;
+    if (success) {
+      currentSession.set(email);
+      goto("/dashboard");
+    } else {
+      email = "";
+      password = "";
+      message = "Invalid Credentials";
     }
-  </script>
+  }
+</script>
   
   {#if message}
     <Message {message} />
