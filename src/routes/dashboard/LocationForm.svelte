@@ -11,11 +11,17 @@
 //     ref: "User",
 //   },
 
+import Coordinates from "$lib/ui/Coordinates.svelte";
+  //...
+  let lat = 52.160858;
+  let lng = -7.15242;
+
 let title = "Galway";
 let imageURL = "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcTwn4EZh1ZftOnaus7nT7Qoujoyn00W7smzMBxvz7kcVBYHfj8R8oLtQAD1NAJZSMvPb89oXO-VY9Vl3jpjwV1g4KaVd54OfHzGw38fUPM";
 
 async function addLocation() {
     console.log(`Just added: ${title} with image ${imageURL}`);
+    console.log(`lat: ${lat}, lng: ${lng}`);
   }
 
 </script>
@@ -35,4 +41,7 @@ async function addLocation() {
       <button class="button is-success is-fullwidth">Add Location</button>
     </div>
   </div>
+
+  <Coordinates bind:lat bind:lng />
+
 </form>
