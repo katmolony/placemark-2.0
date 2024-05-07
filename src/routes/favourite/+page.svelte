@@ -1,5 +1,11 @@
 <script lang="ts">
-    import LocationList from "$lib/ui/LocationList.svelte";
-  </script>
-  
+  import { subTitle } from "$lib/stores";
+  import Card from "$lib/ui/Card.svelte";
+  import LocationList from "$lib/ui/LocationList.svelte";
+
+  subTitle.set("Favourite Locations");
+</script>
+
+<Card title="Favourite Locations">
   <LocationList />
+</Card>
