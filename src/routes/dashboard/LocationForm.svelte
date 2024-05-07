@@ -35,13 +35,10 @@ async function addLocation() {
     <label class="label" for="imageURL">Enter Image URL:</label>
     <input class="input" id="imageURL" name="imageURL" type="string" />
   </div>
-
+  <Coordinates bind:lat bind:lng />
   <div class="field">
     <div class="control">
       <button class="button is-success is-fullwidth">Add Location</button>
     </div>
   </div>
-
-  <Coordinates bind:lat bind:lng />
-
 </form>
