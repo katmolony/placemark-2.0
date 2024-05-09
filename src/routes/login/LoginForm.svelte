@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { placemarkService } from "$lib/services/placemark-service";
   import { currentSession } from "$lib/stores";
   import Message from "$lib/ui/Message.svelte";
   import UserCredentials from "$lib/ui/UserCredentials.svelte";
@@ -9,9 +10,10 @@
   let message = "";
 
   async function login() {
-    const success = true;
-    if (success) {
-      currentSession.set(email);
+    console.log(`attemting to log in email: ${email} with password: ${password}`);
+    let session = await placemarkService.login(email, password);
+    if (session) {
+      currentSession.set(session);
       goto("/dashboard");
     } else {
       email = "";

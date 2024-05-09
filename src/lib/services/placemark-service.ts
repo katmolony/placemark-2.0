@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Session, User } from "$lib/types/placemark-types";
 
 export const placemarkService = {
-  baseUrl: "http://localhost:4000",
+  baseUrl: "http://kates-macbook-air-2.local:4000",
 
   async signup(user: User): Promise<boolean> {
     try {
@@ -17,6 +17,7 @@ export const placemarkService = {
   async login(email: string, password: string): Promise<Session | null> {
     try {
       const response = await axios.post(`${this.baseUrl}/api/users/authenticate`, { email, password });
+      console.log(response);
       if (response.data.success) {
         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
         const session: Session = {
