@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Session, User } from "$lib/types/placemark-types";
 
-export const donationService = {
+export const placemarkService = {
   baseUrl: "http://localhost:4000",
 
   async signup(user: User): Promise<boolean> {
