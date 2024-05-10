@@ -33,7 +33,6 @@ export let locations: Location[];
 <table class="table is-fullwidth">
   <thead>
     <th>City</th>
-    <th>ImageURL</th>
     <th>Cordinates</th>
     <th>Weather</th>
     <th>Temperature</th>
@@ -45,8 +44,6 @@ export let locations: Location[];
           {location.title}
         </td>
         <td>
-          {location.imageURL}
-        </td><td>
           {location.lat}, {location.lng}
         </td>
         <td>

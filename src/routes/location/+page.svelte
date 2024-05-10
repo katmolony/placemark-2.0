@@ -6,15 +6,26 @@
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import type { Location } from "$lib/types/placemark-types";
+  import LocationList from "$lib/ui/LocationList.svelte";
 
-  let locationList: Location[] = [];
+  // let locationList: Location[] = [];
+  let locations: Location[] = [];
   subTitle.set("Welcome to the Dashboard");
 
   onMount(async () => {
-    locationList = await placemarkService.getLocations(get(currentSession));
+    locations = await placemarkService.getLocations(get(currentSession));
   });
 </script>
 
-<Card title="Add Favourite Location">
-  <LocationForm />
-</Card>
+<div class="columns">
+  <div class="column">
+    <Card title="Donatinons to Date">
+      <LocationList {locations} />
+    </Card>
+  </div>
+  <div class="column">
+    <Card title="Add Favourite Location">
+      <LocationForm />
+    </Card>
+  </div>
+</div>
