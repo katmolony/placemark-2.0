@@ -1,29 +1,58 @@
 <script lang="ts">
+  // title: String,
+  //   imageURL: String,
+  //   lat: Number,
+  //   lng: Number,
+  //   temp: Number,
+  //   weather: String,
+  //   userid: {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "User",
+  //   },
+  import { placemarkService } from "$lib/services/placemark-service";
+  import type { User, Location } from "$lib/types/placemark-types";
+  import { currentSession } from "$lib/stores";
+  import Coordinates from "$lib/ui/Coordinates.svelte";
+  import { get } from "svelte/store";
 
-// title: String,
-//   imageURL: String,
-//   lat: Number,
-//   lng: Number,
-//   temp: Number,
-//   weather: String,
-//   userid: {
-//     type: Schema.Types.ObjectId,
-//     ref: "User",
-//   },
-
-import Coordinates from "$lib/ui/Coordinates.svelte";
-  //...
+  let title = "Dublin";
+  let imageURL = "https://example";
   let lat = 52.160858;
   let lng = -7.15242;
+  let temp = 23.4;
+  let weather = "Sunny";
+  let userid = "663cd415cadc3516bce4806b";
 
-let title = "Galway";
-let imageURL = "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcTwn4EZh1ZftOnaus7nT7Qoujoyn00W7smzMBxvz7kcVBYHfj8R8oLtQAD1NAJZSMvPb89oXO-VY9Vl3jpjwV1g4KaVd54OfHzGw38fUPM";
+  let message = "Please add location";
 
-async function addLocation() {
+  // export let userList: User[] = [];
+
+  async function addLocation() {
     console.log(`Just added: ${title} with image ${imageURL}`);
     console.log(`lat: ${lat}, lng: ${lng}`);
+    console.log(`temp: ${temp}, weather: ${weather}, userid: ${userid}`);
+    if (title && imageURL && lat && lng && temp && weather && userid) {
+      //    const user = userList.find((user) => user._id === selectedUser);
+      //  if (user) {
+      const location: Location = {
+        title: title,
+        imageURL: imageURL,
+        lat: lat,
+        lng: lng,
+        temp: temp,
+        weather: weather,
+        userid: userid,
+      };
+      const success = await placemarkService.addLocation(location, get(currentSession));
+      if (!success) {
+        message = "Location not completed - some error occurred";
+        return;
+      }
+      message = `You added ${title} to ${$currentSession.name}`;
+    } else {
+      message = "Please another location";
+    }
   }
-
 </script>
 
 <form on:submit|preventDefault={addLocation}>
@@ -35,6 +64,18 @@ async function addLocation() {
     <label class="label" for="imageURL">Enter Image URL:</label>
     <input class="input" id="imageURL" name="imageURL" type="string" />
   </div>
+  <div class="field">
+    <label class="label" for="temp">Enter temp:</label>
+    <input class="input" id="temp" name="temp" type="string" />
+  </div>
+  <div class="field">
+    <label class="label" for="weather">Enter Weather:</label>
+    <input class="input" id="weather" name="weather" type="string" />
+  </div>
+  <div class="field">
+    <label class="label" for="userid">Enter userid:</label>
+    <input class="input" id="userid" name="userid" type="string" />
+  </div>
   <Coordinates bind:lat bind:lng />
   <div class="field">
     <div class="control">
@@ -42,3 +83,8 @@ async function addLocation() {
     </div>
   </div>
 </form>
+<div class="box mt-4">
+  <div class="content has-text-centered">
+    {message}
+  </div>
+</div>

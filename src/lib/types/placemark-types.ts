@@ -10,7 +10,7 @@ export interface User {
   email: string;
   password: string;
   userType: string;
-  _id?: string;
+  //_id?: string;
 }
 
 export interface Location {
@@ -21,6 +21,7 @@ export interface Location {
   temp: number;
   weather: string;
   userid: User | string; // how to get this
+ // _id: string;
 }
 
 export type BusinessCategories = "Accommodation" | "Dining" | "Shopping" | "Nightlife" | "Activities";
@@ -34,7 +35,7 @@ export interface Business {
   category: BusinessCategories[];
   locationid: Location | string;
   reviews: Review[];
-  _id: string;
+ // _id: string;
 }
 
 export interface Review extends Document {

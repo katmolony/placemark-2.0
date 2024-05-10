@@ -26,12 +26,25 @@ export const placemarkService = {
           token: response.data.token,
           _id: response.data.id
         };
+        console.log(session._id);
         return session;
       }
       return null;
     } catch (error) {
       console.log(error);
       return null;
+    }
+  },
+
+  async addLocation(location: Location, session: Session) {
+    try {
+      console.log("adding location");
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.post(this.baseUrl + "/api/locations", location);
+      console.log(response);
+      return response.status == 200;
+    } catch (error) {
+      return false;
     }
   },
 
