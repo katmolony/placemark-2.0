@@ -1,17 +1,7 @@
 <script lang="ts">
-  // title: String,
-  //   imageURL: String,
-  //   lat: Number,
-  //   lng: Number,
-  //   temp: Number,
-  //   weather: String,
-  //   userid: {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "User",
-  //   },
   import { placemarkService } from "$lib/services/placemark-service";
   import type { User, Location } from "$lib/types/placemark-types";
-  import { currentSession } from "$lib/stores";
+  import { currentSession, latestLocation } from "$lib/stores";
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import { get } from "svelte/store";
 
@@ -45,11 +35,12 @@
         weather: weather,
         userid: userid, // user._id
       };
-      const success = await placemarkService.addLocation(location, get(currentSession));
-      if (!success) {
-        message = "Location not completed - some error occurred";
-        return;
-      }
+      // const success = await placemarkService.addLocation(location, get(currentSession));
+      // if (!success) {
+      //   message = "Location not completed - some error occurred";
+      //   return;
+      // }
+      latestLocation.set(location);
       message = `You added ${title} to ${$currentSession.name}`;
     } else {
       message = "Please enter all location fields";
