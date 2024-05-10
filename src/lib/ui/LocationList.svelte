@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Location } from "$lib/types/placemark-types";
 
-export let locations: Location[];
+  export let locations: Location[];
 </script>
 
 <table class="table is-fullwidth">
