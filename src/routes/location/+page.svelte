@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentSession, subTitle } from "$lib/stores";
+  import { currentSession, subTitle, latestLocation } from "$lib/stores";
   import LocationForm from "./LocationForm.svelte";
   import Card from "$lib/ui/Card.svelte";
   import { placemarkService } from "$lib/services/placemark-service";
@@ -15,11 +15,18 @@
   onMount(async () => {
     locations = await placemarkService.getLocations(get(currentSession));
   });
+
+  latestLocation.subscribe(async (location) => {
+    if (location) {
+      locations.push(location);
+      locations = [...locations];
+    }
+  });
 </script>
 
 <div class="columns">
   <div class="column">
-    <Card title="Donatinons to Date">
+    <Card title="Location List">
       <LocationList {locations} />
     </Card>
   </div>
