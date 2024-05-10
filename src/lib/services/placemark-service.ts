@@ -36,6 +36,16 @@ export const placemarkService = {
     }
   },
 
+  // async getUserId(session: Session): Promise<User | null> {
+  //   try {
+  //     axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+  //     const response = await axios.get(this.baseUrl + "/api/users/" + user);
+  //     return response.data;
+  //   } catch (error) {
+  //     return null;
+  //   }
+  // },
+
   async addLocation(location: Location, session: Session) {
     try {
       console.log("adding location");
