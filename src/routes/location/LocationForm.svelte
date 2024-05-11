@@ -35,7 +35,7 @@
         weather: weather,
         userid: userid, // user._id
       };
-      // const success = await placemarkService.addLocation(location, get(currentSession));
+      const success = await placemarkService.addLocation(location, get(currentSession));
       // if (!success) {
       //   message = "Location not completed - some error occurred";
       //   return;
