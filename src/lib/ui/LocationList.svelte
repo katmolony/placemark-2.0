@@ -28,7 +28,7 @@
           {location.temp}
         </td>
         <td>
-          <a class="button" href="/business"><i class="fas fa-search-location"></i></a>
+          <!-- <a class="button" href="/business"><i class="fas fa-search-location"></i></a> -->
         </td>
       </tr>
     {/each}
