@@ -10,6 +10,7 @@
     <th>Cordinates</th>
     <th>Weather</th>
     <th>Temperature</th>
+    <th></th>
   </thead>
   <tbody>
     {#each locations as location}
@@ -25,6 +26,9 @@
         </td>
         <td>
           {location.temp}
+        </td>
+        <td>
+          <a class="button" href="/business"><i class="fas fa-search-location"></i></a>
         </td>
       </tr>
     {/each}

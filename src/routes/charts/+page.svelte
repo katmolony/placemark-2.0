@@ -21,13 +21,12 @@
   onMount(async () => {
     const locationList = await placemarkService.getLocations(get(currentSession));
 
-    // Sort locations by temperature in descending order
+    // Sort locations by temp in descending order
     const sortedLocations = locationList.sort((a, b) => b.temp - a.temp);
 
-    // Update top temperatures and labels
     sortedLocations.slice(0, 3).forEach((location, index) => {
       topTemps.datasets[0].values[index] = location.temp;
-      topTemps.labels[index] = location.title; // Assuming location has a title property
+      topTemps.labels[index] = location.title;
     });
   });
 </script>
@@ -35,7 +34,7 @@
 <div class="columns">
     <div class="column">
       <Card title="Locations with the Highest Temperature">
-        <Chart data={topTemps} type="line" />
+        <Chart data={topTemps} type="bar" />
       </Card>
     </div>
     <div class="column has-text-centered">
