@@ -1,5 +1,5 @@
 <script lang="ts">
-  // @ts-ignore
+ // @ts-ignore
   import Chart from "svelte-frappe-charts";
   import { onMount } from "svelte";
   import { placemarkService } from "$lib/services/placemark-service";
