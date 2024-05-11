@@ -15,6 +15,7 @@
         <div class="navbar-end">
           <a class="navbar-item" href="/location"> Location Dashboard </a>
           <a class="navbar-item" href="/favourite"> Favourites </a>
+          <a class="navbar-item" href="/charts"> Charts </a>
           <a class="navbar-item" href="/logout"> Logout [{$currentSession.name}]</a>
         </div>
         <div></div>
