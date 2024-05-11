@@ -1,0 +1,53 @@
+<script lang="ts">
+  // @ts-ignore
+  import Chart from "svelte-frappe-charts";
+  import { onMount } from "svelte";
+  import { placemarkService } from "$lib/services/placemark-service";
+  import { currentSession, subTitle } from "$lib/stores";
+  import { get } from "svelte/store";
+  import Card from "$lib/ui/Card.svelte";
+
+  subTitle.set("Welcome to the Charts");
+
+  // const chartData = {
+  //   labels: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"],
+  //   datasets: [
+  //     {
+  //       values: [10, 12, 3, 9, 8, 15, 9]
+  //     }
+  //   ]
+  // };
+
+  const topTemps = {
+    labels: ["", "", ""],
+    datasets: [
+      {
+        values: [0, 0, 0]
+      }
+    ]
+  };
+
+  onMount(async () => {
+    const locationList = await placemarkService.getLocations(get(currentSession));
+
+    // Sort locations by temperature in descending order
+    const sortedLocations = locationList.sort((a, b) => b.temp - a.temp);
+
+    // Update top temperatures and labels
+    sortedLocations.slice(0, 3).forEach((location, index) => {
+      topTemps.datasets[0].values[index] = location.temp;
+      topTemps.labels[index] = location.title; // Assuming location has a title property
+    });
+  });
+</script>
+
+<div class="columns">
+    <div class="column">
+      <Card title="Locations with the Highest Temperature">
+        <Chart data={topTemps} type="line" />
+      </Card>
+    </div>
+    <div class="column has-text-centered">
+      <img alt="Homer" src="/homer4.jpeg" width="300" />
+    </div>
+  </div>
