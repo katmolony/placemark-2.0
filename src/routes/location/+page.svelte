@@ -1,30 +1,38 @@
 <script lang="ts">
-  import { currentSession, subTitle , currentLocation, currentLocationId} from "$lib/stores";
-  import { page } from '$app/stores';
-  import { onMount } from 'svelte';
+  import { currentSession, subTitle, currentLocation, currentLocationId } from "$lib/stores";
+  import { placemarkService } from "$lib/services/placemark-service";
+  import { get } from "svelte/store";
+  import { onMount } from "svelte";
+  import type { Location } from "$lib/types/placemark-types";
 
-  let locationId: string;
+  let locationId: string; //get location id
+  let location: Location | null = null;
+  subTitle.set("Location Page");
 
-    // Subscribe to the currentLocation store to get the locationId
-    currentLocationId.subscribe((value) => {
+  currentLocationId.subscribe((value) => {
     locationId = value;
   });
 
-  let locationDetails: any;
+  onMount(async () => {
+    if (locationId) {
+      // add if statment with message
+      location = await placemarkService.getLocation(locationId, get(currentSession));
 
-  // Fetch location details when the component mounts
-  // onMount(async () => {
-  //   if (locationId) {
-  //     // Fetch location details using locationId (replace this with your actual fetch logic)
-  //     locationDetails = await fetchLocationDetails(locationId);
-  //   }
-  // });
-
-  subTitle.set("Locations Page");
-
+      // Set if location is not null
+      if (location) {
+        subTitle.set(location.title);
+      }
+    }
+  });
 </script>
 
 <p>
-Location page here!
-Location ID: {locationId}
+  Location page here! Location ID: {locationId}
 </p>
+{#if location}
+  <p>
+    Location Title: {location.title}
+  </p>
+{:else}
+  <p>Loading location details...</p>
+{/if}

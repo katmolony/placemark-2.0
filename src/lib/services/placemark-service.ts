@@ -21,6 +21,7 @@ export const placemarkService = {
       console.log(response);
       if (response.data.success) {
         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
+        console.log(response);
         const session: Session = {
           name: response.data.name,
           token: response.data.token,
@@ -68,6 +69,7 @@ export const placemarkService = {
     }
   },
 
+  // Find all for listing locations
   async getLocations(session: Session): Promise<Location[]> {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
@@ -78,10 +80,22 @@ export const placemarkService = {
     }
   },
 
-  async getBusinesss(session: Session): Promise<Business[]> {
+  // Find one location for individual location page
+  async getLocation(id: string, session: Session): Promise<Location | null> {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
-      const response = await axios.get(this.baseUrl + "/api/businesss");
+      const response = await axios.get(this.baseUrl + "/api/locations/" + id);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getLocationBusinesses(session: Session): Promise<Business[]> {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.get(this.baseUrl + "/api/locations/{id}/businesss");
       return response.data;
     } catch (error) {
       return [];
