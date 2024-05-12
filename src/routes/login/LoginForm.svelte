@@ -14,8 +14,9 @@
     let session = await placemarkService.login(email, password);
     if (session) {
       currentSession.set(session);
+      // currentUserid.set(userid);
       localStorage.user = JSON.stringify(session);
-      goto("/location");
+      goto("/dashboard");
     } else {
       email = "";
       password = "";

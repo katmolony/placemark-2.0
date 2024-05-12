@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Location } from "$lib/types/placemark-types";
+  import { goto } from "$app/navigation";
 
   export let locations: Location[];
 </script>
@@ -10,6 +11,7 @@
     <th>Cordinates</th>
     <th>Weather</th>
     <th>Temperature</th>
+    <th></th>
     <th></th>
   </thead>
   <tbody>
@@ -28,7 +30,11 @@
           {location.temp}
         </td>
         <td>
-          <a class="button" href="/business"><i class="fas fa-search-location"></i></a>
+          {location.userid}
+        </td>
+        <td>
+          <!-- <a class="button" href="/business?locationId=${location._id}"><i class="fas fa-search-location"></i></a> -->
+          <a class="button" href="/location"><i class="fas fa-search-location"></i></a>
         </td>
       </tr>
     {/each}
