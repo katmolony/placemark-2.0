@@ -4,6 +4,7 @@
   import { currentSession, latestLocation } from "$lib/stores";
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import { get } from "svelte/store";
+  import { v4 as uuidv4 } from 'uuid';
 
   let title = "";
   let imageURL = "https://";
@@ -11,7 +12,7 @@
   let lng = 0;
   let temp = 0;
   let weather = "";
-  let userid = "663cd415cadc3516bce4806b";
+  let userid = "6";
 
   let message = "Please add location";
 
@@ -25,15 +26,16 @@
       //    const user = userList.find((user) => user._id === selectedUser);
       //  if (user) {
         //locations = await placemarkService.getLocations(get(currentSession)
-      // const user = await placemarkService.getUserId(get(currentSession));
       const location: Location = {
+       // _id: "",
         title: title,
         imageURL: imageURL,
         lat: lat,
         lng: lng,
         temp: temp,
         weather: weather,
-        userid: userid, // user._id
+        userid: userid,
+       //userid: $currentSession._id, // user._id
       };
       const success = await placemarkService.addLocation(location, get(currentSession));
       // if (!success) {
