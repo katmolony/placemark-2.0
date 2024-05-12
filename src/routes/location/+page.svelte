@@ -4,6 +4,8 @@
   import { get } from "svelte/store";
   import { onMount } from "svelte";
   import type { Location } from "$lib/types/placemark-types";
+  import Card from "$lib/ui/Card.svelte";
+  import LocationDetails from "$lib/ui/LocationDetails.svelte";
 
   let locationId: string; //get location id
   let location: Location | null = null;
@@ -15,7 +17,6 @@
 
   onMount(async () => {
     if (locationId) {
-      // add if statment with message
       location = await placemarkService.getLocation(locationId, get(currentSession));
 
       // Set if location is not null
@@ -33,6 +34,19 @@
   <p>
     Location Title: {location.title}
   </p>
+  <div class="columns">
+    <div class="column">
+      <Card title="{location.title} Details">
+        <LocationDetails {location} />
+      </Card>
+    </div>
+    <div class="column">
+      <Card title="Images of {location.title}">
+        <!-- <LocationForm /> -->
+      </Card>
+    </div>
+  </div>
+  
 {:else}
   <p>Loading location details...</p>
 {/if}
