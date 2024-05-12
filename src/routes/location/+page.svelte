@@ -1,19 +1,30 @@
 <script lang="ts">
-  // import { placemarkService } from "$lib/services/placemark-service";
-  // import type { Location } from "$lib/types/placemark-types";
-  import { currentSession, subTitle } from "$lib/stores";
-  // import Card from "$lib/ui/Card.svelte";
-  // import LocationList from "$lib/ui/LocationList.svelte";
-  // import { onMount } from "svelte";
-  // import { get } from "svelte/store";
+  import { currentSession, subTitle , currentLocation, currentLocationId} from "$lib/stores";
+  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+
+  let locationId: string;
+
+    // Subscribe to the currentLocation store to get the locationId
+    currentLocationId.subscribe((value) => {
+    locationId = value;
+  });
+
+  let locationDetails: any;
+
+  // Fetch location details when the component mounts
+  // onMount(async () => {
+  //   if (locationId) {
+  //     // Fetch location details using locationId (replace this with your actual fetch logic)
+  //     locationDetails = await fetchLocationDetails(locationId);
+  //   }
+  // });
 
   subTitle.set("Locations Page");
-  // let locations: Location[] = [];
-  // onMount(async () => {
-  //   locations = await placemarkService.getLocations(get(currentSession));
-  // });
+
 </script>
 
 <p>
 Location page here!
+Location ID: {locationId}
 </p>

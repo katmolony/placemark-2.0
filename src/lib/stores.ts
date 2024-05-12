@@ -5,3 +5,6 @@ import type { Location, Session } from "$lib/types/placemark-types";
 export const currentSession = writable<Session>(); // email of the currently logged in user
 export const subTitle = writable<string>(); // sub title to be used on a window
 export const latestLocation = writable<Location>();
+
+export const currentLocation = writable<Location>();
+export const currentLocationId = writable<string>();
