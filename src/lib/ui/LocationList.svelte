@@ -22,7 +22,9 @@
     {#each locations as location}
       <tr>
         <td>
-          {location.title}
+          <button class="button" on:click={() => navigateToLocation(location._id)}>
+            {location.title}
+          </button>
         </td>
         <td>
           {location.weather}
