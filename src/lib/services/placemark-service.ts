@@ -52,17 +52,17 @@ export const placemarkService = {
       console.log("adding location");
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.post(this.baseUrl + "/api/locations", location);
-      console.log(response);
+      // console.log(response);
       return response.status == 200;
     } catch (error) {
       return false;
     }
   },
 
-  async addBusiness(business: Business, session: Session) {
+  async addBusiness(business: Business, locationId: string, session: Session) {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
-      const response = await axios.post(this.baseUrl + "/api/locations/" + business.locationid + "/businesss", business);
+      const response = await axios.post(this.baseUrl + "/api/locations/" + locationId + "/businesss", business);
       return response.status == 200;
     } catch (error) {
       return false;
@@ -85,17 +85,18 @@ export const placemarkService = {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.get(this.baseUrl + "/api/locations/" + id);
-      console.log(response);
+      // console.log(response);
       return response.data;
     } catch (error) {
       return null;
     }
   },
 
-  async getLocationBusinesses(session: Session): Promise<Business[]> {
+  async getLocationBusinesses(id: string, session: Session): Promise<Business[]> {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
-      const response = await axios.get(this.baseUrl + "/api/locations/{id}/businesss");
+      const response = await axios.get(this.baseUrl + "/api/locations/" + id + "/businesss");
+      console.log(response);
       return response.data;
     } catch (error) {
       return [];

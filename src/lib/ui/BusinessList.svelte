@@ -1,16 +1,17 @@
-<!-- <script lang="ts">
+<script lang="ts">
     import type { Business } from "$lib/types/placemark-types";
   
     export let businesses: Business[];
-
-    // mcdonalds: {
+    // export let businesses = [
+    //   {
     //   title: 'Mc Donalds Middle Street',
     //   address: '123 Ronald Street, New Orleans',
     //   description: 'Lovely food, fun for families',
     //   lat: 100,
     //   lng: 200,
     //   category: 'Dining',
-    //   _id: new ObjectId('663f946e5753f4b92e70ce53'),
+    //   }
+    // ]
   </script>
   
   <table class="table is-fullwidth">
@@ -46,18 +47,4 @@
         </tr>
       {/each}
     </tbody>
-  </table> -->
-
-  <script lang="ts">
-    import { page } from '$app/stores';
-  
-    let locationId: string | undefined;
-  
-    // $: {
-    //   // Extract locationId from the query parameters
-    //   locationId = $page.query.get('locationId') as string | undefined;
-    // }
-  </script>
-  
-  <h1>Business Page</h1>
-  <p>Location ID: {locationId}</p>
+  </table>
