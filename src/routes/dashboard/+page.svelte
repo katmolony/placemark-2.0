@@ -8,7 +8,6 @@
     import type { Location } from "$lib/types/placemark-types";
     import LocationList from "$lib/ui/LocationList.svelte";
   
-    // let locationList: Location[] = [];
     let locations: Location[] = [];
     subTitle.set("Welcome to the Dashboard");
   
