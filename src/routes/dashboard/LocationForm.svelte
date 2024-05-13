@@ -6,21 +6,21 @@
   import { get } from "svelte/store";
   import { v4 as uuidv4 } from 'uuid';
 
+  // let user: User;
   let title = "";
   let imageURL = "https://";
   let lat = 0;
   let lng = 0;
   let temp = 0;
   let weather = "";
-  let userid = "6";
+  let userid = "4";
+ // let userid = $currentSession._id;
 
   let message = "Please add location";
 
-  // export let userList: User[] = [];
-
   async function addLocation() {
-    console.log(`Just added: ${title} with image ${imageURL}`);
-    console.log(`lat: ${lat}, lng: ${lng}`);
+    const user = get(currentSession);
+    console.log(user._id);
     console.log(`temp: ${temp}, weather: ${weather}, userid: ${userid}`);
     if (title && imageURL && lat && lng && temp && weather && userid) {
       //    const user = userList.find((user) => user._id === selectedUser);
@@ -34,8 +34,8 @@
         lng: lng,
         temp: temp,
         weather: weather,
-        userid: userid,
-       //userid: $currentSession._id, // user._id
+        //userid: userid,
+        userid: userid // user._id
       };
       const success = await placemarkService.addLocation(location, get(currentSession));
       // if (!success) {
@@ -67,10 +67,10 @@
     <label class="label" for="weather">Enter Weather:</label>
     <input bind:value={weather}  class="input" id="weather" name="weather" type="string" />
   </div>
-  <div class="field">
+  <!-- <div class="field">
     <label class="label" for="userid">Enter userid:</label>
     <input bind:value={userid} class="input" id="userid" name="userid" type="string" />
-  </div>
+  </div> -->
   <Coordinates bind:lat bind:lng />
   <div class="field">
     <div class="control">
