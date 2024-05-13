@@ -31,6 +31,8 @@
     if (location) {
       locations.push(location);
       locations = [...locations];
+      topTemps = generateByLocationTemp(locations);
+      totalBusinessPerLocation = generateBusinessesPerLocation(locations, businesses);
     }
   });
 </script>
