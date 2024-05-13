@@ -41,8 +41,13 @@
     if (location) {
       locations.push(location);
       locations = [...locations];
+      // Graphs
       topTemps = generateByLocationTemp(locations);
       totalBusinessPerLocation = generateBusinessesPerLocation(locations, businesses);
+      // Map
+      const popup = `${location.title} with temperature of ${location.temp}°C`;
+      map.addMarker(location.lat, location.lng, popup);
+      map.moveTo(location.lat, location.lng);
     }
   });
 </script>
