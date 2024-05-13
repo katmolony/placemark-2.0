@@ -13,10 +13,14 @@
 
   onMount(async () => {
     locations = await placemarkService.getLocations(get(currentSession));
-    console.log(locations);
     locations.forEach((location: Location) => {
-      map.addMarker(location.lat, location.lng);
+    //   if (typeof location.title !== "string") {
+        const popup = `${location.title} with temperature of ${location.temp}°C`;
+        map.addMarker(location.lat, location.lng, popup);
+    //   }
     });
+    const lastLocation = locations[locations.length - 1];
+    if (lastLocation) map.moveTo(lastLocation.lat, lastLocation.lng);
   });
 </script>
 
