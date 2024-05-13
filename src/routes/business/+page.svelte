@@ -3,7 +3,6 @@
 <p>
   Business page here!
 </p>
-  
 
 
   
