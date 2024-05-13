@@ -92,6 +92,18 @@ export const placemarkService = {
     }
   },
 
+  // To get all businesses
+  async getBusinesses(session: Session): Promise<Business[]> {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.get(this.baseUrl + "/api/businesss");
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  },
+
   async getLocationBusinesses(id: string, session: Session): Promise<Business[]> {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
