@@ -13,8 +13,7 @@
   let lng = 0;
   let temp = 0;
   let weather = "";
-  let userid = "4";
- // let userid = $currentSession._id;
+  let userid = $currentSession._id;
 
   let message = "Please add location";
 
@@ -22,7 +21,7 @@
     const user = get(currentSession);
     console.log(user._id);
     console.log(`temp: ${temp}, weather: ${weather}, userid: ${userid}`);
-    if (title && imageURL && lat && lng && temp && weather && userid) {
+    if (title && imageURL && lat && lng && temp && weather) {
       //    const user = userList.find((user) => user._id === selectedUser);
       //  if (user) {
         //locations = await placemarkService.getLocations(get(currentSession)
