@@ -7,12 +7,14 @@
   import { placemarkService } from "$lib/services/placemark-service";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
-  import type { DataSet, Location , Business} from "$lib/types/placemark-types";
+  import type { DataSet, Location, Business } from "$lib/types/placemark-types";
   import LocationList from "$lib/ui/LocationList.svelte";
   import { generateByLocationTemp, generateBusinessesPerLocation } from "$lib/services/placemark-utils";
+  import LeafletMap from "$lib/ui/LeafletMap.svelte";
 
   let locations: Location[] = [];
   let businesses: Business[] = [];
+  let map: LeafletMap;
 
   let topTemps: DataSet;
   let totalBusinessPerLocation: DataSet;
@@ -23,8 +25,16 @@
     locations = await placemarkService.getLocations(get(currentSession));
     businesses = await placemarkService.getBusinesses(get(currentSession));
 
+    // Graphs
     topTemps = generateByLocationTemp(locations);
     totalBusinessPerLocation = generateBusinessesPerLocation(locations, businesses);
+    // Map
+    locations.forEach((location: Location) => {
+      const popup = `${location.title} with temperature of ${location.temp}°C`;
+      map.addMarker(location.lat, location.lng, popup);
+    });
+    const lastLocation = locations[locations.length - 1];
+    if (lastLocation) map.moveTo(lastLocation.lat, lastLocation.lng);
   });
 
   latestLocation.subscribe(async (location) => {
@@ -43,8 +53,13 @@
       <LocationList {locations} />
     </Card>
   </div>
+  <div class="column">
+    <Card title="Location Coordinates">
+      <LeafletMap height={30} bind:this={map} />
+    </Card>
   </div>
-  <div class="columns">
+</div>
+<div class="columns">
   <div class="column">
     <Card title="Locations with the Hottest Temperatures">
       <Chart data={topTemps} type="bar" />
