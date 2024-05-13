@@ -4,7 +4,7 @@
   import { currentSession, latestLocation } from "$lib/stores";
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import { get } from "svelte/store";
-  import { v4 as uuidv4 } from 'uuid';
+  // import { v4 as uuidv4 } from 'uuid';
 
   // let user: User;
   let title = "";
