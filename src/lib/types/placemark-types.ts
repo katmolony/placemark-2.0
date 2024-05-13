@@ -47,3 +47,8 @@ export interface Review extends Document {
   updatedAt: Date;
   timestamp: string;
 }
+
+export interface DataSet {
+  labels: string[];
+  datasets: [{ values: number[] }];
+}
