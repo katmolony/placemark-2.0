@@ -14,10 +14,8 @@
 <table class="table is-fullwidth">
   <thead>
     <th>City</th>
-    <th>Cordinates</th>
     <th>Weather</th>
     <th>Temperature</th>
-    <th></th>
     <th></th>
   </thead>
   <tbody>
@@ -27,16 +25,10 @@
           {location.title}
         </td>
         <td>
-          {location.lat}, {location.lng}
-        </td>
-        <td>
           {location.weather}
         </td>
         <td>
           {location.temp}
-        </td>
-        <td>
-          {location.userid}
         </td>
         <td>
             <button class="button" on:click={() => navigateToLocation(location._id)}>
