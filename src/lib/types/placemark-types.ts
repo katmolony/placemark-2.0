@@ -32,9 +32,9 @@ export interface Business {
   description: string;
   lat: number;
   lng: number;
-  category: BusinessCategories[];
+  category: BusinessCategories | string; // could be wrong
   locationid: Location | string;
-  reviews: Review[];
+ // reviews: Review[];
  // _id: string;
 }
 

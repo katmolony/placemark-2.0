@@ -1,38 +1,80 @@
 <script lang="ts">
-  import { currentSession, subTitle, latestLocation } from "$lib/stores";
-  import LocationForm from "./LocationForm.svelte";
-  import Card from "$lib/ui/Card.svelte";
+  import { currentSession, subTitle, latestBusiness, currentLocationId } from "$lib/stores";
   import { placemarkService } from "$lib/services/placemark-service";
-  import { onMount } from "svelte";
   import { get } from "svelte/store";
-  import type { Location } from "$lib/types/placemark-types";
-  import LocationList from "$lib/ui/LocationList.svelte";
+  import { onMount } from "svelte";
+  import type { Location, Business } from "$lib/types/placemark-types";
+  import Card from "$lib/ui/Card.svelte";
+  import LocationDetails from "$lib/ui/LocationDetails.svelte";
+  import BusinessList from "$lib/ui/BusinessList.svelte";
+  import Message from "$lib/ui/Message.svelte";
+  import BusinessForm from "./BusinessForm.svelte";
 
-  // let locationList: Location[] = [];
-  let locations: Location[] = [];
-  subTitle.set("Welcome to the Dashboard");
+  let locationId: string; //get location id
+  let location: Location | null = null;
+  let businesses: Business[] = [];
+  let message = "";
 
-  onMount(async () => {
-    locations = await placemarkService.getLocations(get(currentSession));
+  subTitle.set("Location Page");
+
+  currentLocationId.subscribe((value) => {
+    locationId = value;
   });
 
-  latestLocation.subscribe(async (location) => {
-    if (location) {
-      locations.push(location);
-      locations = [...locations];
+  latestBusiness.subscribe(async (business) => {
+      if (business) {
+        businesses.push(business);
+        businesses = [...businesses];
+      }
+    });
+
+  onMount(async () => {
+    if (locationId) {
+      location = await placemarkService.getLocation(locationId, get(currentSession));
+      businesses = await placemarkService.getLocationBusinesses(locationId, get(currentSession));
+
+      // Set if location is not null
+      if (location) {
+        subTitle.set(location.title);
+      }
+
+      if (businesses.length === 0) {
+        message = "No businesses added yet";
+      }
     }
   });
 </script>
 
-<div class="columns">
-  <div class="column">
-    <Card title="Location List">
-      <LocationList {locations} />
-    </Card>
+{#if location}
+  <div class="columns">
+    <div class="column">
+      <Card title="{location.title} Details">
+        <LocationDetails {location} />
+      </Card>
+    </div>
+    <div class="column">
+      <Card title="Images of {location.title}">
+        <!-- <LocationImage /> -->
+      </Card>
+    </div>
   </div>
-  <div class="column">
-    <Card title="Add Favourite Location">
-      <LocationForm />
-    </Card>
+  {#if businesses}
+  <div class="columns">
+    <div class="column">
+      <Card title="{location.title}'s Businesses">
+        <BusinessList {businesses}/>
+      </Card>
+    </div>
+    <div class="column">
+      <Card title="Add a Business">
+        <BusinessForm />
+      </Card>
+    </div>
   </div>
-</div>
+  {:else }
+    <Message {message} />
+  {/if}
+  
+{:else}
+  <p>Loading location details...</p>
+{/if}

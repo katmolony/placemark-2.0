@@ -1,7 +1,14 @@
 <script lang="ts">
   import type { Location } from "$lib/types/placemark-types";
+  import { goto } from "$app/navigation"; 
+  import { currentLocationId } from "$lib/stores"; 
 
   export let locations: Location[];
+
+  function navigateToLocation(locationId: string) {
+    currentLocationId.set(locationId);
+    goto('/location');
+  }
 </script>
 
 <table class="table is-fullwidth">
@@ -10,6 +17,7 @@
     <th>Cordinates</th>
     <th>Weather</th>
     <th>Temperature</th>
+    <th></th>
     <th></th>
   </thead>
   <tbody>
@@ -28,7 +36,12 @@
           {location.temp}
         </td>
         <td>
-          <!-- <a class="button" href="/business"><i class="fas fa-search-location"></i></a> -->
+          {location.userid}
+        </td>
+        <td>
+            <button class="button" on:click={() => navigateToLocation(location._id)}>
+              <i class="fas fa-search-location"></i>
+            </button>
         </td>
       </tr>
     {/each}
