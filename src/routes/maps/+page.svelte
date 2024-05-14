@@ -11,7 +11,7 @@
 
   subTitle.set("Placemark Locations");
   let map: LeafletMap;
-  let weatherMap: LeafletMap;
+  let weatherMap: WeatherMap;
   let locations: Location[] = [];
   let businesses: Business[] = [];
 
