@@ -67,16 +67,17 @@
     locationMarker.bindPopup(popup);
   }
 
-  export function addBusinessMarker(lat: number, lng: number, popupText: string, businessUrl: string) {
+  // export function addBusinessMarker(lat: number, lng: number, popupText: string, businessUrl: string) {
+  export function addBusinessMarker(lat: number, lng: number, popupText: string) {
     const businessMarker = L.marker([lat, lng], { icon: businessIcon }).addTo(imap); // Use business icon
-    const popupContent = `
-        <div>
-            <p>${popupText}</p>
-            <a href="${businessUrl}" target="_blank">Business Details</a> // Clickable link
-        </div>
-    `;
+    // const popupContent = `
+    //     <div>
+    //         <p>${popupText}</p>
+    //         <a href="${businessUrl}" target="_blank">Business Details</a> // Clickable link
+    //     </div>
+    // `;
     const popup = L.popup({ autoClose: false, closeOnClick: false });
-    popup.setContent(popupContent);
+    popup.setContent(popupText);
     businessMarker.bindPopup(popup);
   }
 
