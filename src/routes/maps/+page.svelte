@@ -3,12 +3,15 @@
   import { placemarkService } from "$lib/services/placemark-service";
   import Card from "$lib/ui/Card.svelte";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
+  import WeatherMap from "$lib/ui/WeatherMap.svelte";
   import { onMount } from "svelte";
   import type { Location, Business } from "$lib/types/placemark-types";
   import { get } from "svelte/store";
+  
 
   subTitle.set("Placemark Locations");
   let map: LeafletMap;
+  let weatherMap: LeafletMap;
   let locations: Location[] = [];
   let businesses: Business[] = [];
 
@@ -33,4 +36,7 @@
 
 <Card title="Placemark Locations">
   <LeafletMap height={60} bind:this={map} />
+</Card>
+<Card title="Weather Locations">
+  <WeatherMap height={60} bind:this={weatherMap} />
 </Card>
