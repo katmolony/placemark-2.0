@@ -4,6 +4,11 @@
   import type { Control, Map as LeafletMap } from "leaflet";
   import L from "leaflet";
 
+  import type { Location, Business } from "$lib/types/placemark-types";
+  import { currentSession, subTitle } from "$lib/stores";
+  import { placemarkService } from "$lib/services/placemark-service";
+  import { get } from "svelte/store";
+
   export let id = "home-map-id";
   export let height = 60;
   export let location = { lat: 53.2734, lng: -7.7783203 };
@@ -16,19 +21,23 @@
   let overlays: Control.LayersObject = {};
   let baseLayers: any;
 
+  let locations: Location[] = [];
+  let businesses: Business[] = [];
+
   const locationIconFA = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#525dff" d="M112 316.9v156.7l22 33c4.8 7.1 15.2 7.1 20 0L176 473.6V316.9c-10.4 1.9-21.1 3.1-32 3.1s-21.6-1.1-32-3.1zM144 0C64.5 0 0 64.5 0 144s64.5 144 144 144 144-64.5 144-144S223.5 0 144 0zm0 76c-37.5 0-68 30.5-68 68 0 6.6-5.4 12-12 12s-12-5.4-12-12c0-50.7 41.3-92 92-92 6.6 0 12 5.4 12 12s-5.4 12-12 12z"/></svg>`;
-  const businessIconFA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#B197FC" d="M298 214.3L285.8 96H328c13.3 0 24-10.7 24-24V24c0-13.3-10.7-24-24-24H56C42.7 0 32 10.7 32 24v48c0 13.3 10.7 24 24 24h42.2L86 214.3C37.5 236.8 0 277.3 0 328c0 13.3 10.7 24 24 24h136v104c0 1.2 .3 2.5 .8 3.6l24 48c2.9 5.9 11.4 5.9 14.3 0l24-48a8 8 0 0 0 .8-3.6V352h136c13.3 0 24-10.7 24-24 0-51.2-38-91.4-86-113.7z"/></svg>';
+  const businessIconFA =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#B197FC" d="M298 214.3L285.8 96H328c13.3 0 24-10.7 24-24V24c0-13.3-10.7-24-24-24H56C42.7 0 32 10.7 32 24v48c0 13.3 10.7 24 24 24h42.2L86 214.3C37.5 236.8 0 277.3 0 328c0 13.3 10.7 24 24 24h136v104c0 1.2 .3 2.5 .8 3.6l24 48c2.9 5.9 11.4 5.9 14.3 0l24-48a8 8 0 0 0 .8-3.6V352h136c13.3 0 24-10.7 24-24 0-51.2-38-91.4-86-113.7z"/></svg>';
 
   const locationIcon = L.divIcon({
     html: locationIconFA,
-    iconSize: [32, 32], 
-    className: "location-icon" 
+    iconSize: [32, 32],
+    className: "location-icon"
   });
 
   const businessIcon = L.divIcon({
     html: businessIconFA,
-    iconSize: [32, 32], 
-    className: "business-icon" 
+    iconSize: [32, 32],
+    className: "business-icon"
   });
 
   onMount(async () => {
@@ -50,7 +59,49 @@
       minZoom: minZoom,
       layers: [defaultLayer]
     });
-    control = leaflet.control.layers(baseLayers, overlays).addTo(imap);
+    // control = leaflet.control.layers(baseLayers, overlays).addTo(imap);
+
+    const locationLayer = L.layerGroup().addTo(imap);
+    const businessLayer = L.layerGroup().addTo(imap);
+
+    // Add layers
+    const layerControl = L.control
+      .layers(baseLayers, {
+        Locations: locationLayer,
+        Businesses: businessLayer
+      })
+      .addTo(imap);
+
+    locations = await placemarkService.getLocations(get(currentSession));
+    businesses = await placemarkService.getBusinesses(get(currentSession));
+
+    // Function to add markers
+    function addLocationMarker(lat: number, lng: number, popupText: string) {
+      const marker = L.marker([lat, lng], { icon: locationIcon }).addTo(locationLayer);
+      marker.bindPopup(`<b>${popupText}</b>`);
+    }
+    function addBusinessMarker(lat: number, lng: number, popupText: string) {
+      const marker = L.marker([lat, lng], { icon: businessIcon }).addTo(businessLayer);
+      marker.bindPopup(`<b>${popupText}</b>`);
+    }
+
+    // Add markers to layers
+    locations.forEach((location) => {
+      const locationPopup = `${location.title}`;
+      addLocationMarker(location.lat, location.lng, locationPopup);
+    });
+    businesses.forEach((business) => {
+      const businessPopup = `${business.title}`;
+      addBusinessMarker(business.lat, business.lng, businessPopup);
+    });
+
+    // Remove when layers switched off
+    locationLayer.off("remove", function () {
+      locationLayer.clearLayers();
+    });
+    businessLayer.off("remove", function () {
+      businessLayer.clearLayers();
+    });
   });
 
   export function addMarker(lat: number, lng: number, popupText: string) {

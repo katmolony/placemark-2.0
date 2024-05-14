@@ -13,21 +13,21 @@
   let businesses: Business[] = [];
 
   onMount(async () => {
-    locations = await placemarkService.getLocations(get(currentSession));
-    businesses = await placemarkService.getBusinesses(get(currentSession));
-    locations.forEach((location: Location) => {
-    //   if (typeof location.title !== "string") {
-        const locationPopup = `${location.title} with temperature of ${location.temp}°C`;
-        map.addLocationMarker(location.lat, location.lng, locationPopup);
-    // }
+    // locations = await placemarkService.getLocations(get(currentSession));
+    // businesses = await placemarkService.getBusinesses(get(currentSession));
+    // locations.forEach((location: Location) => {
+    // //   if (typeof location.title !== "string") {
+    //     const locationPopup = `${location.title} with temperature of ${location.temp}°C`;
+    //     map.addLocationMarker(location.lat, location.lng, locationPopup);
+    // // }
     
-    });
-    businesses.forEach((business:Business) => {
-      const businessPopup = `${business.title}`;
-      map.addBusinessMarker(business.lat, business.lng, businessPopup);
-    })
-    const lastLocation = locations[locations.length - 1];
-    if (lastLocation) map.moveTo(lastLocation.lat, lastLocation.lng);
+    // });
+    // businesses.forEach((business:Business) => {
+    //   const businessPopup = `${business.title}`;
+    //   map.addBusinessMarker(business.lat, business.lng, businessPopup);
+    // })
+    // const lastLocation = locations[locations.length - 1];
+    // if (lastLocation) map.moveTo(lastLocation.lat, lastLocation.lng);
   });
 </script>
 
