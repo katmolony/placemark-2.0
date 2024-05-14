@@ -16,6 +16,21 @@
   let overlays: Control.LayersObject = {};
   let baseLayers: any;
 
+  const locationIconFA = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#525dff" d="M112 316.9v156.7l22 33c4.8 7.1 15.2 7.1 20 0L176 473.6V316.9c-10.4 1.9-21.1 3.1-32 3.1s-21.6-1.1-32-3.1zM144 0C64.5 0 0 64.5 0 144s64.5 144 144 144 144-64.5 144-144S223.5 0 144 0zm0 76c-37.5 0-68 30.5-68 68 0 6.6-5.4 12-12 12s-12-5.4-12-12c0-50.7 41.3-92 92-92 6.6 0 12 5.4 12 12s-5.4 12-12 12z"/></svg>`;
+  const businessIconFA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#B197FC" d="M298 214.3L285.8 96H328c13.3 0 24-10.7 24-24V24c0-13.3-10.7-24-24-24H56C42.7 0 32 10.7 32 24v48c0 13.3 10.7 24 24 24h42.2L86 214.3C37.5 236.8 0 277.3 0 328c0 13.3 10.7 24 24 24h136v104c0 1.2 .3 2.5 .8 3.6l24 48c2.9 5.9 11.4 5.9 14.3 0l24-48a8 8 0 0 0 .8-3.6V352h136c13.3 0 24-10.7 24-24 0-51.2-38-91.4-86-113.7z"/></svg>';
+
+  const locationIcon = L.divIcon({
+    html: locationIconFA,
+    iconSize: [32, 32], 
+    className: "location-icon" 
+  });
+
+  const businessIcon = L.divIcon({
+    html: businessIconFA,
+    iconSize: [32, 32], 
+    className: "business-icon" 
+  });
+
   onMount(async () => {
     const leaflet = await import("leaflet");
     baseLayers = {
@@ -24,7 +39,7 @@
         attribution:
           'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
       }),
-      Satellite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+      Locations: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
         attribution: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
       })
     };
@@ -39,16 +54,35 @@
   });
 
   export function addMarker(lat: number, lng: number, popupText: string) {
-    const marker = L.marker([lat, lng]).addTo(imap);
+    const locationMarker = L.marker([lat, lng]).addTo(imap);
     const popup = L.popup({ autoClose: false, closeOnClick: false });
     popup.setContent(popupText);
-    marker.bindPopup(popup);
+    locationMarker.bindPopup(popup);
+  }
+
+  export function addLocationMarker(lat: number, lng: number, popupText: string) {
+    const locationMarker = L.marker([lat, lng], { icon: locationIcon }).addTo(imap); // Use location icon
+    const popup = L.popup({ autoClose: false, closeOnClick: false });
+    popup.setContent(popupText);
+    locationMarker.bindPopup(popup);
+  }
+
+  export function addBusinessMarker(lat: number, lng: number, popupText: string, businessUrl: string) {
+    const businessMarker = L.marker([lat, lng], { icon: businessIcon }).addTo(imap); // Use business icon
+    const popupContent = `
+        <div>
+            <p>${popupText}</p>
+            <a href="${businessUrl}" target="_blank">Business Details</a> // Clickable link
+        </div>
+    `;
+    const popup = L.popup({ autoClose: false, closeOnClick: false });
+    popup.setContent(popupContent);
+    businessMarker.bindPopup(popup);
   }
 
   export function moveTo(lat: number, lng: number) {
     imap.flyTo({ lat: lat, lng: lng });
   }
-
 </script>
 
 <div {id} class="box" style="height: {height}vh" />
