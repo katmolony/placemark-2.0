@@ -11,6 +11,7 @@
   import LocationList from "$lib/ui/LocationList.svelte";
   import { generateByLocationTemp, generateBusinessesPerLocation } from "$lib/services/placemark-utils";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
+  const cloudinaryCloudName = import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
   let locations: Location[] = [];
   let businesses: Business[] = [];
