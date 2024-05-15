@@ -35,6 +35,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"svelte-cloudinary": "^1.3.2",
 		"uuid": "^9.0.1"
 	}
 }
