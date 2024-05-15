@@ -9,6 +9,8 @@
   import BusinessList from "$lib/ui/BusinessList.svelte";
   import Message from "$lib/ui/Message.svelte";
   import BusinessForm from "./BusinessForm.svelte";
+  import { CldImage } from "svelte-cloudinary";
+  const cloudinaryCloudName = import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
   let locationId: string; //get location id
   let location: Location | null = null;
@@ -22,11 +24,11 @@
   });
 
   latestBusiness.subscribe(async (business) => {
-      if (business) {
-        businesses.push(business);
-        businesses = [...businesses];
-      }
-    });
+    if (business) {
+      businesses.push(business);
+      businesses = [...businesses];
+    }
+  });
 
   onMount(async () => {
     if (locationId) {
@@ -54,27 +56,31 @@
     </div>
     <div class="column">
       <Card title="Images of {location.title}">
-        <!-- <LocationImage /> -->
+        {#if cloudinaryCloudName}
+          <CldImage width=auto height=auto src="placemark/locations/{location.title}_1" alt="{location.title} image" />
+        {:else}
+          <!-- Cloudinary is not configured -->
+          <p>Error loading images</p>
+        {/if}
       </Card>
     </div>
   </div>
   {#if businesses}
-  <div class="columns">
-    <div class="column">
-      <Card title="{location.title}'s Businesses">
-        <BusinessList {businesses}/>
-      </Card>
+    <div class="columns">
+      <div class="column">
+        <Card title="{location.title}'s Businesses">
+          <BusinessList {businesses} />
+        </Card>
+      </div>
+      <div class="column">
+        <Card title="Add a Business">
+          <BusinessForm />
+        </Card>
+      </div>
     </div>
-    <div class="column">
-      <Card title="Add a Business">
-        <BusinessForm />
-      </Card>
-    </div>
-  </div>
-  {:else }
+  {:else}
     <Message {message} />
   {/if}
-  
 {:else}
   <p>Loading location details...</p>
 {/if}
