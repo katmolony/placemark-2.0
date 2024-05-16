@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { Session, User } from "$lib/types/placemark-types";
-import type { Location, Business, Review } from "$lib/types/placemark-types";
+import type { Location, Business, Review, Image } from "$lib/types/placemark-types";
 
 export const placemarkService = {
   baseUrl: "http://kates-macbook-air-2.local:4000",
@@ -97,7 +97,6 @@ export const placemarkService = {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.get(this.baseUrl + "/api/businesss");
-      console.log(response);
       return response.data;
     } catch (error) {
       return [];
@@ -113,5 +112,39 @@ export const placemarkService = {
     } catch (error) {
       return [];
     }
-  }  
+  },  
+
+  async getLocationImages(id: string, session: Session): Promise<Image[]> {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.get(this.baseUrl + "/api/locations/" + id + "/images");
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  }, 
+
+    // To get all images
+    async getAllImages(session: Session): Promise<Image[]> {
+      try {
+        axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+        const response = await axios.get(this.baseUrl + "/api/images");
+        return response.data;
+      } catch (error) {
+        return [];
+      }
+    },
+
+    async deleteImage(id: string, session: Session) {
+      try {
+        console.log("deleting image");
+        axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+        const response = await axios.delete(this.baseUrl + "/api/images/" + id );
+        // console.log(response);
+        return response.status == 200;
+      } catch (error) {
+        return false;
+      }
+    },
 };
