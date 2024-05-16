@@ -2,16 +2,6 @@
     import type { Business } from "$lib/types/placemark-types";
   
     export let businesses: Business[];
-    // export let businesses = [
-    //   {
-    //   title: 'Mc Donalds Middle Street',
-    //   address: '123 Ronald Street, New Orleans',
-    //   description: 'Lovely food, fun for families',
-    //   lat: 100,
-    //   lng: 200,
-    //   category: 'Dining',
-    //   }
-    // ]
   </script>
   
   <table class="table is-fullwidth">
