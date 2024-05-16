@@ -59,7 +59,6 @@
     </div>
     {#if images}
       <div class="columns">
-        <p>hi</p>
       </div>
     {:else}
       <Message {message} />
