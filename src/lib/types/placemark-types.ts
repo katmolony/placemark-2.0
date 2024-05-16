@@ -38,6 +38,14 @@ export interface Business {
  // _id: string;
 }
 
+export interface Image {
+  url: string;
+  title: string;
+  locationid: Location | string;
+ // reviews: Review[];
+ // _id: string;
+}
+
 export interface Review extends Document {
   content: string;
   rating: number;
