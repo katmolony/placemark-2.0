@@ -10,10 +10,21 @@
   import Message from "$lib/ui/Message.svelte";
   import BusinessForm from "./BusinessForm.svelte";
   import { CldImage } from "svelte-cloudinary";
-  const cloudinaryCloudName = import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  import { goto } from "$app/navigation";
+  import ImageDisplay from "$lib/ui/ImageDisplay.svelte";
+
+  function navigateToImages(locationId: string) {
+    currentLocationId.set(locationId);
+    goto("/images");
+  }
+
+  function navigateToDashboard() {
+    goto("/dashboard");
+  }
 
   let locationId: string; //get location id
   let location: Location | null = null;
+  //  let location: Location;
   let businesses: Business[] = [];
   let message = "";
 
@@ -56,12 +67,10 @@
     </div>
     <div class="column">
       <Card title="Images of {location.title}">
-        {#if cloudinaryCloudName}
-          <CldImage width=auto height=auto src="placemark/locations/{location.title}_1" alt="{location.title} image" />
-        {:else}
-          <!-- Cloudinary is not configured -->
-          <p>Error loading images</p>
-        {/if}
+        <button class="button" on:click={() => navigateToImages(location._id)}>
+          <i class="fas fa-search-location"></i>
+        </button>
+        <ImageDisplay {location} />
       </Card>
     </div>
   </div>
@@ -82,5 +91,10 @@
     <Message {message} />
   {/if}
 {:else}
-  <p>Loading location details...</p>
+  <h1>Error loading location details</h1>
+  <h1>Please return to dashboard and try again</h1>
+  <button class="button" on:click={() => navigateToDashboard()}>
+    <i>Return to Dashboard</i>
+  </button>
+  <!-- // might add a reload here -->
 {/if}
