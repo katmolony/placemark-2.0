@@ -11,6 +11,17 @@
 
   async function login() {
     console.log(`attemting to log in email: ${email} with password: ${password}`);
+
+    // Validation
+    if (!isValidEmail(email)) {
+      message = "Invalid email format";
+      return;
+    }
+    if (!isValidPassword(password)) {
+      message = "Password must be at least 6 characters long and contain at least one number and one capital letter";
+      return;
+    }
+
     let session = await placemarkService.login(email, password);
     if (session) {
       currentSession.set(session);
@@ -23,12 +34,23 @@
       message = "Invalid Credentials";
     }
   }
+
+  function isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function isValidPassword(password: string): boolean {
+    // Regular expression for password validation (at least 6 characters, one number, one capital letter)
+    const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{6,}$/;
+    return passwordRegex.test(password);
+  }
 </script>
-  
-  {#if message}
-    <Message {message} />
-  {/if}
-  <form on:submit|preventDefault={login}>
-    <UserCredentials bind:email bind:password />
-    <button class="button is-success is-fullwidth">Log In</button>
-  </form>
+
+{#if message}
+  <Message {message} />
+{/if}
+<form on:submit|preventDefault={login}>
+  <UserCredentials bind:email bind:password />
+  <button class="button is-success is-fullwidth">Log In</button>
+</form>
