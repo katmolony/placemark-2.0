@@ -8,7 +8,11 @@ export const placemarkService = {
   async signup(user: User): Promise<boolean> {
     try {
       const response = await axios.post(`${this.baseUrl}/api/users`, user);
-      return response.data.success === true;
+      if (response.status == 201) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       console.log(error);
       return false;
@@ -112,7 +116,7 @@ export const placemarkService = {
     } catch (error) {
       return [];
     }
-  },  
+  },
 
   async getLocationImages(id: string, session: Session): Promise<Image[]> {
     try {
@@ -123,28 +127,28 @@ export const placemarkService = {
     } catch (error) {
       return [];
     }
-  }, 
+  },
 
-    // To get all images
-    async getAllImages(session: Session): Promise<Image[]> {
-      try {
-        axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
-        const response = await axios.get(this.baseUrl + "/api/images");
-        return response.data;
-      } catch (error) {
-        return [];
-      }
-    },
+  // To get all images
+  async getAllImages(session: Session): Promise<Image[]> {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.get(this.baseUrl + "/api/images");
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  },
 
-    async deleteImage(id: string, session: Session) {
-      try {
-        console.log("deleting image");
-        axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
-        const response = await axios.delete(this.baseUrl + "/api/images/" + id );
-        // console.log(response);
-        return response.status == 200;
-      } catch (error) {
-        return false;
-      }
-    },
+  async deleteImage(id: string, session: Session) {
+    try {
+      console.log("deleting image");
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.delete(this.baseUrl + "/api/images/" + id);
+      // console.log(response);
+      return response.status == 200;
+    } catch (error) {
+      return false;
+    }
+  }
 };
