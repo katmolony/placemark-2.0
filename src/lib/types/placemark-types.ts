@@ -19,10 +19,11 @@ export interface Location {
   lat: number;
   lng: number;
   temp: number;
-  weather: string;
+  weather: WeatherCategories | string;
   userid: User | string; // how to get this
- // _id: string;
+  // _id: string;
 }
+export type WeatherCategories = "Sunny" | "Cloudy" | "Rainy" | "Snowy" | "Foggy" | "Windy" | "Stormy" | "Partly Cloudy" | "Overcast" | "Showers" | "Thunderstorms" | "Hazy";
 
 export type BusinessCategories = "Accommodation" | "Dining" | "Shopping" | "Nightlife" | "Activities";
 
@@ -34,23 +35,23 @@ export interface Business {
   lng: number;
   category: BusinessCategories | string; // could be wrong
   locationid: Location | string;
- // reviews: Review[];
- // _id: string;
+  // reviews: Review[];
+  // _id: string;
 }
 
 export interface Image {
   url: string;
   title: string;
   locationid: Location | string;
- // reviews: Review[];
- // _id: string;
+  // reviews: Review[];
+  // _id: string;
 }
 
 export interface Review extends Document {
   content: string;
   rating: number;
-  businessid: Business| string;
-  userid: User| string;
+  businessid: Business | string;
+  userid: User | string;
   createdAt: Date;
   updatedAt: Date;
   timestamp: string;
