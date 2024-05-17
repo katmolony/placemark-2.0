@@ -29,7 +29,7 @@ export const placemarkService = {
         const session: Session = {
           name: response.data.name,
           token: response.data.token,
-          _id: response.data.id
+          _id: response.data._id
         };
         console.log(session._id);
         return session;
