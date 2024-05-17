@@ -6,31 +6,63 @@
   import { get } from "svelte/store";
   // import { v4 as uuidv4 } from 'uuid';
 
-  // let user: User;
   let title = "";
   let imageURL = "https://";
-  let lat = 0;
-  let lng = 0;
   let temp = 0;
   let weather = "";
   let userid = $currentSession._id;
 
   let message = "Please add location";
 
+  interface LocationInfo {
+    country: string;
+    lat: number;
+    lon: number;
+  }
+  const allowedWeather = ["Sunny", "Cloudy", "Rainy", "Snowy", "Foggy", "Windy", "Stormy", "Partly Cloudy", "Overcast", "Showers", "Thunderstorms", "Hazy"];
+
+  async function getLocationInfo(title: string): Promise<LocationInfo | null> {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(title)}&format=json&addressdetails=1&limit=1`);
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const address = data[0].address;
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        if (address && address.country) {
+          return { country: address.country, lat: lat, lon: lon };
+        }
+      }
+    } catch (error) {
+      console.error("Error retrieving location information:", error);
+    }
+    return null;
+  }
+
   async function addLocation() {
     const user = get(currentSession);
     console.log(user._id);
     console.log(`temp: ${temp}, weather: ${weather}, userid: ${userid}`);
-    if (title && imageURL && lat && lng && temp && weather) {
+
+    if (title && temp && weather) {
       //    const user = userList.find((user) => user._id === selectedUser);
       //  if (user) {
-        //locations = await placemarkService.getLocations(get(currentSession)
+      //locations = await placemarkService.getLocations(get(currentSession)
+
+      const LocationInfo = await getLocationInfo(title);
+      if (!LocationInfo) {
+        message = "Country not found";
+        return;
+      }
+      const { country, lat, lon } = LocationInfo;
+
       const location: Location = {
-       // _id: "",
-        title: title,
+        // _id: "",
+        title: country,
         imageURL: imageURL,
         lat: lat,
-        lng: lng,
+        lng: lon,
         temp: temp,
         weather: weather,
         //userid: userid,
@@ -51,26 +83,30 @@
 
 <form on:submit|preventDefault={addLocation}>
   <div class="field">
-    <label class="label" for="title">Enter City Name:</label>
+    <label class="label" for="title">Enter Country Name:</label>
     <input bind:value={title} class="input" id="title" name="title" type="string" />
   </div>
-  <div class="field">
-    <label class="label" for="imageURL">Enter Image URL:</label>
-    <input bind:value={imageURL} class="input" id="imageURL" name="imageURL" type="string" />
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label" for="temp">Enter temp:</label>
+        <input bind:value={temp} class="input" id="temp" name="temp" type="string" />
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label" for="weather">Select Weather:</label>
+        <div class="select">
+          <select bind:value={weather} id="weather">
+            <option value="" disabled>Select weather</option>
+            {#each allowedWeather as option}
+              <option value={option}>{option}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="field">
-    <label class="label" for="temp">Enter temp:</label>
-    <input bind:value={temp} class="input" id="temp" name="temp" type="string" />
-  </div>
-  <div class="field">
-    <label class="label" for="weather">Enter Weather:</label>
-    <input bind:value={weather}  class="input" id="weather" name="weather" type="string" />
-  </div>
-  <!-- <div class="field">
-    <label class="label" for="userid">Enter userid:</label>
-    <input bind:value={userid} class="input" id="userid" name="userid" type="string" />
-  </div> -->
-  <Coordinates bind:lat bind:lng />
   <div class="field">
     <div class="control">
       <button class="button is-success is-fullwidth">Add Location</button>

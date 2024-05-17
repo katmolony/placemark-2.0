@@ -41,7 +41,6 @@
   }
 
   function isValidPassword(password: string): boolean {
-    // Regular expression for password validation (at least 6 characters, one number, one capital letter)
     const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{6,}$/;
     return passwordRegex.test(password);
   }
