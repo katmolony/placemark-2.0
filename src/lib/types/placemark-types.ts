@@ -23,6 +23,12 @@ export interface Location {
   userid: User | string; // how to get this
   // _id: string;
 }
+
+export interface LocationInfo {
+  country: string;
+  lat: number;
+  lon: number;
+}
 export type WeatherCategories = "Sunny" | "Cloudy" | "Rainy" | "Snowy" | "Foggy" | "Windy" | "Stormy" | "Partly Cloudy" | "Overcast" | "Showers" | "Thunderstorms" | "Hazy";
 
 export type BusinessCategories = "Accommodation" | "Dining" | "Shopping" | "Nightlife" | "Activities";
@@ -37,6 +43,12 @@ export interface Business {
   locationid: Location | string;
   // reviews: Review[];
   // _id: string;
+}
+
+export interface AddressInfo {
+  displayName: string;
+  lat: number;
+  lon: number;
 }
 
 export interface Image {
