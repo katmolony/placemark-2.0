@@ -33,8 +33,9 @@
     </div>
     <div class="column">
       <Card title="Images of {location.title}">
-        <button class="button" on:click={() => navigateToImages(location._id)}>
-          <i class="fas fa-search-location"></i>
+        <button class="button" on:click={() => navigateToImages(location._id)}
+          style="margin-bottom: 20px;">
+          <i class="fas fa-search-location"></i>Explore more images of {location.title} 
         </button>
         <ImageDisplay {location} />
       </Card>

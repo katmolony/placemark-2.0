@@ -12,8 +12,8 @@
     <!-- <p><strong>Coordinates:</strong> {business.lat}, {business.lng}</p> -->
     <p><strong>Address:</strong> {business.address}</p>
     <p><strong>Description:</strong> {business.description}</p>
-    <a href="/business" class="button">
-      <!-- <FontAwesomeIcon icon={faSearch} /> -->
-    </a>
+    <!-- <a href="/business" class="button">
+      <FontAwesomeIcon icon={faSearch} />
+    </a> -->
   </Card>
 {/each}

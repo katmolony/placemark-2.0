@@ -76,7 +76,7 @@ export const actions = {
         description: form.get("description") as unknown as string,
         locationid: locationId
       };
-      console.log(business);
+    //   console.log(business);
       placemarkService.addBusiness(business, locationId, user);
       console.log(`You added ${business.title}`);
     }
