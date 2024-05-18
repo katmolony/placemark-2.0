@@ -147,5 +147,16 @@ export const placemarkService = {
     } catch (error) {
       return false;
     }
-  }
+  },
+
+  async uploadImageToDatabase(image: Image, locationId: string, session: Session) {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.post(this.baseUrl + "/api/locations/" + locationId + "/images", image);
+      return response.status == 200;
+    } catch (error) {
+      return false;
+    }
+  },
+  
 };

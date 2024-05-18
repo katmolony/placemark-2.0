@@ -4,6 +4,7 @@
   import LocationDetails from "$lib/ui/LocationDetails.svelte";
   import ImageGalery from "$lib/ui/ImageGalery.svelte";
   import ImageForm from "./ImageForm.svelte";
+  // import { UploadWidget } from "$lib/ui/UploadWidget.svelte";
 
   let locationId: string; //get location id
   let message = "";
@@ -13,6 +14,10 @@
   let location = data.location;
 
   subTitle.set("Image Page");
+
+  if (location) {
+    subTitle.set(`${location.title}'s Image Gallery`);
+  }
 
   currentLocationId.subscribe((value) => {
     locationId = value;
@@ -28,14 +33,14 @@
     </div>
     <div class="column">
       <Card title="Upload Photos">
-        <ImageForm />
+        <ImageForm location={location}/>
       </Card>
     </div>
   </div>
   <div class="columns">
     <div class="column">
       <Card title="Images of {location.title}">
-        <ImageGalery images={data.allImages} />
+        <ImageGalery images={data.locationImages} />
       </Card>
     </div>
   </div>

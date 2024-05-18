@@ -1,7 +1,20 @@
 import { placemarkService } from "$lib/services/placemark-service";
 import type { PageServerLoad } from "./$types";
 import type { Session } from "$lib/types/placemark-types";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import type { Actions } from "@sveltejs/kit";
+import { v2 as cloudinary } from "cloudinary";
+
+// const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const cloudinaryApiKey = import.meta.env.VITE_CLOUDINARY_API_KEY;
+const cloudinaryApiSecret = import.meta.env.VITE_CLOUDINARY_API_SECRET;
+const cloudinaryCloudName = import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+cloudinary.config({
+  cloud_name: cloudinaryCloudName,
+  api_key: cloudinaryApiKey,
+  api_secret: cloudinaryApiSecret
+});
 
 export const load: PageServerLoad = async ({ parent, url }) => {
   const { session } = await parent();
@@ -17,19 +30,19 @@ export const load: PageServerLoad = async ({ parent, url }) => {
       locationId,
       location: await placemarkService.getLocation(locationId, session!),
       businesses: await placemarkService.getLocationBusinesses(locationId, session!),
-      // locationImages: await placemarkService.getLocationImages(locationId, session!),
-      allImages: await placemarkService.getAllImages(session!)
+      allImages: await placemarkService.getAllImages(session!),
+      locationImages: await placemarkService.getLocationImages(locationId, session!)
     };
   }
 };
 
-export const actions = {
+export const actions: Actions = {
   deleteImage: async ({ request, cookies, url }) => {
     const placemarkUser = cookies.get("placemark-user") as string;
-    console.log("Full URL:", url.href);
+    // console.log("Full URL:", url.href);
 
     const imageId = url.searchParams.get("imageId");
-    console.log("This is the image id: ", imageId);
+    // console.log("This is the image id: ", imageId);
 
     if (!imageId) {
       console.error("Location ID not found in URL");
@@ -40,39 +53,36 @@ export const actions = {
       const user = JSON.parse(placemarkUser) as Session;
       placemarkService.deleteImage(imageId, user);
     }
-  }
+  },
 
-  addImage:async (request, cookies, url) => {
+  addImage: async ({ request, cookies, url }) => {
     const placemarkUser = cookies.get("placemark-user") as string;
+    const locationId = url.searchParams.get("locationId");
+    if (!locationId) {
+      console.error("Location ID not found in URL");
+      return;
+    }
+    if (placemarkUser) {
+      const user = JSON.parse(placemarkUser) as Session;
+      const form = await request.formData();
 
-      console.log("Full URL:", url.href);
-
-      const locationId = url.searchParams.get("locationId");
-  
-      console.log("This is the location id for image:", locationId);
-  
-      if (!locationId) {
-        console.error("Location ID not found in URL");
+      const imageUrl = form.get("imageUrl") as string;
+      console.log("Retrieved imageUrl:", imageUrl);
+      if (!imageUrl) {
+        console.error("Image URL not uploaded");
         return;
       }
-      if (placemarkUser) {
-        const user = JSON.parse(placemarkUser) as Session;
-        const form = await request.formData();
-
-        const file = form.get("file") as unknown as File;
-        const location = await placemarkService.getLocation(locationId, user);
-        const uniqueId = uuidv4(); // Generate a unique ID
-        const imageUrl = `placemark/${location.title}-${uniqueId}`;
-  
-        const image = {
+      const location = await placemarkService.getLocation(locationId, user);
+      if (location) {
+        const imageDeatils = {
           url: imageUrl,
           title: location.title,
-          locationid: locationId,
+          locationid: locationId
         };
-        
-        console.log(image);
-        await placemarkService.addImage(image, locationId, file); // Assuming this method uploads the file to Cloudinary and associates it with the location
-        console.log(`You added an image titled ${image.title}`);
+        console.log(imageDeatils);
+        await placemarkService.uploadImageToDatabase(imageDeatils, locationId, user);
+        console.log(`You added an image to database titled ${imageDeatils.title} on URL : ${imageDeatils.url}`);
       }
     }
-  };
+  }
+};
