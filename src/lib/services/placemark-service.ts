@@ -22,10 +22,8 @@ export const placemarkService = {
   async login(email: string, password: string): Promise<Session | null> {
     try {
       const response = await axios.post(`${this.baseUrl}/api/users/authenticate`, { email, password });
-      console.log(response);
       if (response.data.success) {
         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
-        console.log(response);
         const session: Session = {
           name: response.data.name,
           token: response.data.token,
@@ -56,7 +54,6 @@ export const placemarkService = {
       console.log("adding location");
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.post(this.baseUrl + "/api/locations", location);
-      // console.log(response);
       return response.status == 200;
     } catch (error) {
       return false;
