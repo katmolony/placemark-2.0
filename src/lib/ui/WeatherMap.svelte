@@ -107,7 +107,6 @@
 
     locations = await placemarkService.getLocations(get(currentSession));
 
-    // Add markers to layers
     const weatherIcons = {
       Sunny: sunnyIcon,
       Cloudy: cloudyIcon,
@@ -123,7 +122,6 @@
       Hazy: hazyIcon
     } as { [key: string]: L.DivIcon };
 
-    // Add markers to layers
     locations.forEach((location) => {
       const weatherIcon = weatherIcons[location.weather];
       const locationPopup = `${location.title}'s weather is ${location.weather} with temperature of ${location.temp}`;

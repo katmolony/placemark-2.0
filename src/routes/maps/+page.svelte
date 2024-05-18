@@ -1,36 +1,33 @@
 <script lang="ts">
   import { currentSession, subTitle } from "$lib/stores";
-  import { placemarkService } from "$lib/services/placemark-service";
   import Card from "$lib/ui/Card.svelte";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
   import WeatherMap from "$lib/ui/WeatherMap.svelte";
   import { onMount } from "svelte";
   import type { Location, Business } from "$lib/types/placemark-types";
-  import { get } from "svelte/store";
-  
 
-  subTitle.set("Placemark Locations");
+  export let data: any;
   let map: LeafletMap;
   let weatherMap: WeatherMap;
-  let locations: Location[] = [];
-  let businesses: Business[] = [];
+  subTitle.set("Placemark Locations");
 
   onMount(async () => {
-    // locations = await placemarkService.getLocations(get(currentSession));
-    // businesses = await placemarkService.getBusinesses(get(currentSession));
-    // locations.forEach((location: Location) => {
-    // //   if (typeof location.title !== "string") {
-    //     const locationPopup = `${location.title} with temperature of ${location.temp}°C`;
-    //     map.addLocationMarker(location.lat, location.lng, locationPopup);
-    // // }
-    
-    // });
-    // businesses.forEach((business:Business) => {
-    //   const businessPopup = `${business.title}`;
-    //   map.addBusinessMarker(business.lat, business.lng, businessPopup);
-    // })
-    // const lastLocation = locations[locations.length - 1];
-    // if (lastLocation) map.moveTo(lastLocation.lat, lastLocation.lng);
+    const leaflet = await import("leaflet");
+    const locations = data.locations;
+    const businesses = data.businesses;
+    // Location Markers
+    locations.forEach((location: Location) => {
+      const locationPopup = `${location.title} with temperature of ${location.temp}°C`;
+      map.addLocationMarker(location.lat, location.lng, locationPopup);
+    });
+    // Business Markers
+    businesses.forEach((business: Business) => {
+      const businessPopup = `${business.title}`;
+      map.addBusinessMarker(business.lat, business.lng, businessPopup);
+    });
+    const lastLocation = locations[locations.length - 1];
+    if (lastLocation && map) map.moveTo(lastLocation.lat, lastLocation.lng);
+    if (lastLocation && weatherMap) weatherMap.moveTo(lastLocation.lat, lastLocation.lng);
   });
 </script>
 

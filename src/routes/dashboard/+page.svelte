@@ -4,76 +4,46 @@
   import { currentSession, subTitle, latestLocation } from "$lib/stores";
   import LocationForm from "./LocationForm.svelte";
   import Card from "$lib/ui/Card.svelte";
-  import { placemarkService } from "$lib/services/placemark-service";
-  import { onMount } from "svelte";
-  import { get } from "svelte/store";
-  import type { DataSet, Location, Business } from "$lib/types/placemark-types";
   import LocationList from "$lib/ui/LocationList.svelte";
-  import { generateByLocationTemp, generateBusinessesPerLocation } from "$lib/services/placemark-utils";
-  import LeafletMap from "$lib/ui/LeafletMap.svelte";
-  const cloudinaryCloudName = import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  import { browser } from "$app/environment";
 
-  let locations: Location[] = [];
-  let businesses: Business[] = [];
-  let map: LeafletMap;
-
-  let topTemps: DataSet;
-  let totalBusinessPerLocation: DataSet;
-
+  export let data: any;
   subTitle.set("Welcome to the Dashboard");
 
-  onMount(async () => {
-    locations = await placemarkService.getLocations(get(currentSession));
-    businesses = await placemarkService.getBusinesses(get(currentSession));
-
-    // Graphs
-    topTemps = generateByLocationTemp(locations);
-    totalBusinessPerLocation = generateBusinessesPerLocation(locations, businesses);
-    // Map
-    locations.forEach((location: Location) => {
-      const popup = `${location.title} with temperature of ${location.temp}°C`;
-      map.addMarker(location.lat, location.lng, popup);
+  // Map
+  let LeafletMap: any;
+  // Download map in browser
+  if (browser) {
+    import("$lib/ui/LeafletMap.svelte").then((module) => {
+      LeafletMap = module.default;
     });
-    const lastLocation = locations[locations.length - 1];
-    if (lastLocation) map.moveTo(lastLocation.lat, lastLocation.lng);
-  });
+  }
 
-  latestLocation.subscribe(async (location) => {
-    if (location) {
-      locations.push(location);
-      locations = [...locations];
-      // Graphs
-      topTemps = generateByLocationTemp(locations);
-      totalBusinessPerLocation = generateBusinessesPerLocation(locations, businesses);
-      // Map
-      const popup = `${location.title} with temperature of ${location.temp}°C`;
-      map.addMarker(location.lat, location.lng, popup);
-      map.moveTo(location.lat, location.lng);
-    }
-  });
 </script>
 
 <div class="columns">
   <div class="column">
     <Card title="Location List">
-      <LocationList {locations} />
+      <LocationList locations={data.locations} />
     </Card>
   </div>
-  <div class="column">
-    <Card title="Location Coordinates">
-      <LeafletMap height={30} bind:this={map} />
-    </Card>
-  </div>
+  {#if browser && LeafletMap}
+    <div class="column">
+      <Card title="Location Coordinates">
+        <LeafletMap height={60}/>
+      </Card>
+    </div>
+  {/if}
 </div>
 <div class="columns">
   <div class="column">
     <Card title="Locations with the Hottest Temperatures">
-      <Chart data={topTemps} type="bar" />
+      <Chart data={data.topTemps} type="bar" />
     </Card>
   </div>
   <div class="column">
     <Card title="Businesses Per Location">
-      <Chart data={totalBusinessPerLocation} type="pie" />
+      <Chart data={data.totalBusinessPerLocation} type="pie" />
     </Card>
   </div>
 </div>

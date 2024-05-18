@@ -14,11 +14,11 @@
       <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-end">
           <a class="navbar-item" href="/dashboard"> Dashboard </a>
-          <a class="navbar-item" href="/favourite"> Favourites </a>
+          <a class="navbar-item" href="/favourite"> Locations </a>
           <a class="navbar-item" href="/charts"> Charts </a>
           <a class="navbar-item" href="/maps"> Maps </a>
           <!-- <a class="navbar-item" href="/images"> Images </a> -->
-          <a class="navbar-item" href="/logout"> Logout [{$currentSession.name}]</a>
+          <a data-sveltekit-preload-data="tap" class="navbar-item" href="/logout"> Logout [{$currentSession?.name}]</a>
         </div>
         <div></div>
       </div>

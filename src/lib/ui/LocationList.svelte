@@ -7,7 +7,8 @@
 
   function navigateToLocation(locationId: string) {
     currentLocationId.set(locationId);
-    goto('/location');
+    // goto(`/location/${locationId}`);
+    goto(`/location?locationId=${locationId}`);
   }
 </script>
 
