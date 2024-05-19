@@ -125,11 +125,11 @@
     locations.forEach((location) => {
       const weatherIcon = weatherIcons[location.weather];
       const locationPopup = `${location.title}'s weather is ${location.weather} with temperature of ${location.temp}`;
-      addMarker(location.lat, location.lng, locationPopup, weatherIcon);
+      addWeatherMarker(location.lat, location.lng, locationPopup, weatherIcon);
     });
   });
 
-  export function addMarker(lat: number, lng: number, popupText: string, weatherIcon: any) {
+  export function addWeatherMarker(lat: number, lng: number, popupText: string, weatherIcon: any) {
     const locationMarker = L.marker([lat, lng], { icon: weatherIcon }).addTo(imap);
     const popup = L.popup({ autoClose: false, closeOnClick: false });
     popup.setContent(popupText);

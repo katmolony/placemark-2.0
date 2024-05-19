@@ -22,6 +22,7 @@ export const placemarkService = {
   async login(email: string, password: string): Promise<Session | null> {
     try {
       const response = await axios.post(`${this.baseUrl}/api/users/authenticate`, { email, password });
+      console.log("this is the login response:", response);
       if (response.data.success) {
         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
         const session: Session = {
@@ -38,6 +39,23 @@ export const placemarkService = {
       return null;
     }
   },
+
+  async githubLogin(accessToken: string): Promise<Session | null> {
+    try {
+        axios.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
+        const session: Session = {
+          token: accessToken,
+          name: "GitHub User",
+          _id: accessToken
+        };
+        console.log(session._id);
+        return session;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+
 
   // async getUserId(session: Session): Promise<User | null> {
   //   try {
@@ -108,7 +126,7 @@ export const placemarkService = {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.get(this.baseUrl + "/api/locations/" + id + "/businesss");
-      console.log(response);
+     // console.log(response);
       return response.data;
     } catch (error) {
       return [];
@@ -119,7 +137,7 @@ export const placemarkService = {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.get(this.baseUrl + "/api/locations/" + id + "/images");
-      console.log(response);
+     // console.log(response);
       return response.data;
     } catch (error) {
       return [];

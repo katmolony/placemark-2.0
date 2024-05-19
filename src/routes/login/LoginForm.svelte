@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import { placemarkService } from "$lib/services/placemark-service";
-  import { currentSession } from "$lib/stores";
   import Message from "$lib/ui/Message.svelte";
   import UserCredentials from "$lib/ui/UserCredentials.svelte";
+  import { supabase } from "$lib/supabaseClient";
 
-  // let email = "";
-  // let password = "";
   let message = "";
 
 </script>
@@ -14,7 +10,20 @@
 {#if message}
   <Message {message} />
 {/if}
-<form method="POST" action="?/login">
-  <UserCredentials />
-  <button class="button is-success is-fullwidth">Log In</button>
-</form>
+<div class="column">
+  <form method="POST" action="?/login">
+    <UserCredentials />
+    <button class="button is-success is-fullwidth">Log In</button>
+  </form>
+</div>
+<!-- <div class="column">
+  <form method="POST" action="?/githubLogin&provider=github">
+    <button class="button is-fullwidth">Login with Github</button>
+  </form>
+</div> -->
+<div class="column">
+  <form method="POST" action="?/OAuth2">
+    <!-- <form class="auth-form" method="post" action="?/OAuth2"> -->
+    <button class="button is-fullwidth" type="submit"> Sign Up with Google </button>
+  </form>
+</div>
