@@ -3,7 +3,8 @@ import type { Session, User } from "$lib/types/placemark-types";
 import type { Location, Business, Review, Image } from "$lib/types/placemark-types";
 
 export const placemarkService = {
-  baseUrl: "http://kates-macbook-air-2.local:4000",
+  // baseUrl: "http://kates-macbook-air-2.local:4000",
+  baseUrl: "https://placemark-v1-1-typescript.onrender.com",
 
   async signup(user: User): Promise<boolean> {
     try {
