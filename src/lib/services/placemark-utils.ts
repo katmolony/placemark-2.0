@@ -20,6 +20,22 @@ export function generateByLocationTemp(locationList: Location[]): DataSet {
   return topTemps;
 }
 
+export function generateApacheTemp(locationList: Location[]) {
+  const topTemps = {
+    labels: ["", "", ""],
+    temps: [0, 0, 0]
+  };
+
+  // Sort locations by temp in descending order
+  const sortedLocations = locationList.sort((a, b) => b.temp - a.temp);
+  sortedLocations.slice(0, 6).forEach((location, index) => {
+    topTemps.temps[index] = location.temp;
+    topTemps.labels[index] = location.title;
+  });
+
+  return topTemps;
+}
+
 export function generateBusinessesPerLocation(locations: Location[], businessList: Business[]): DataSet {
   const totalBusinessPerLocation: DataSet = {
     labels: [],

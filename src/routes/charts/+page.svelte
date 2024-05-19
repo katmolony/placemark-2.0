@@ -3,9 +3,11 @@
   import Chart from "svelte-frappe-charts";
   import { currentSession, subTitle } from "$lib/stores";
   import Card from "$lib/ui/Card.svelte";
+  import EChart from "$lib/ui/EChart.svelte";
 
   export let data: any;
   subTitle.set("Welcome to the Charts");
+
 </script>
 
 <div class="columns">
@@ -19,7 +21,7 @@
       <Chart data={data.totalBusinessPerLocation} type="pie" />
     </Card>
   </div>
-  <div class="column has-text-centered">
-    <img alt="Homer" src="/homer4.jpeg" width="300" />
   </div>
-</div>
+  <div class="column has-text-centered">
+    <EChart options={data.chartOptions} />
+  </div>
