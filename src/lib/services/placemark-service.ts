@@ -42,20 +42,19 @@ export const placemarkService = {
 
   async githubLogin(accessToken: string): Promise<Session | null> {
     try {
-        axios.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
-        const session: Session = {
-          token: accessToken,
-          name: "GitHub User",
-          _id: accessToken
-        };
-        console.log(session._id);
-        return session;
+      axios.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
+      const session: Session = {
+        token: accessToken,
+        name: "GitHub User",
+        _id: accessToken
+      };
+      console.log(session._id);
+      return session;
     } catch (error) {
       console.log(error);
       return null;
     }
   },
-
 
   // async getUserId(session: Session): Promise<User | null> {
   //   try {
@@ -126,7 +125,7 @@ export const placemarkService = {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.get(this.baseUrl + "/api/locations/" + id + "/businesss");
-     // console.log(response);
+      // console.log(response);
       return response.data;
     } catch (error) {
       return [];
@@ -137,7 +136,7 @@ export const placemarkService = {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
       const response = await axios.get(this.baseUrl + "/api/locations/" + id + "/images");
-     // console.log(response);
+      // console.log(response);
       return response.data;
     } catch (error) {
       return [];
@@ -176,5 +175,25 @@ export const placemarkService = {
       return false;
     }
   },
-  
+
+  async getTemperaturesByCountry(location: Location): Promise<number[]> {
+    const apiKey = "6f31a0fd23d1415ef151dd57611408aa";
+    // const apiKey = process.env.OPENWEATHER_API_KEY;
+    const lat = location.lat;
+    const lon = location.lng;
+    const exclude = "current,minutely,hourly"; // Exclude current, minutely, and hourly forecasts
+
+    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${exclude}&units=metric&appid=${apiKey}`;
+
+    try {
+      const response = await axios.get(url);
+      const dailyWeather = response.data.daily;
+      const temperatures = dailyWeather.map((day: any) => day.temp.day);
+
+      return temperatures;
+    } catch (error) {
+      console.error("Error fetching daily temperatures:", error);
+      throw new Error("Failed to fetch daily temperatures");
+    }
+  },
 };

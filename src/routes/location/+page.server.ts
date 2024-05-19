@@ -1,6 +1,8 @@
 import { placemarkService } from "$lib/services/placemark-service";
 import type { PageServerLoad } from "./$types";
 import type { Session, BusinessCategories, AddressInfo } from "$lib/types/placemark-types";
+import { generateApacheDailyLocationTemp } from "$lib/services/placemark-utils";
+import { checkTemperatureTrend } from "$lib/services/placemark-analytics";
 
 export const load: PageServerLoad = async ({ parent, url }) => {
   const { session } = await parent();
@@ -12,9 +14,13 @@ export const load: PageServerLoad = async ({ parent, url }) => {
     };
   }
   if (session) {
+    const location = await placemarkService.getLocation(locationId, session!);
+    const tempData = await placemarkService.getTemperaturesByCountry(location!);
     return {
       locationId,
-      location: await placemarkService.getLocation(locationId, session!),
+      location,
+      dailyTemp: generateApacheDailyLocationTemp(tempData),
+      tempTrend: checkTemperatureTrend(tempData),
       businesses: await placemarkService.getLocationBusinesses(locationId, session!)
     };
   }
@@ -76,7 +82,7 @@ export const actions = {
         description: form.get("description") as unknown as string,
         locationid: locationId
       };
-    //   console.log(business);
+      //   console.log(business);
       placemarkService.addBusiness(business, locationId, user);
       console.log(`You added ${business.title}`);
     }

@@ -36,6 +36,39 @@ export function generateApacheTemp(locationList: Location[]) {
   return topTemps;
 }
 
+export function generateApacheDailyLocationTemp(temperatures: number[]) {
+  const today = new Date();
+  const dates = [today];
+  
+  for (let i = 1; i < temperatures.length; i++) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      dates.unshift(date);
+  }
+
+  return {
+      title: {
+          text: "Daily Temperatures"
+      },
+      tooltip: {
+          trigger: "axis",
+          formatter: '{b}: {c}°C'
+      },
+      xAxis: {
+          type: "category",
+          data: dates.map(date => `${date.getMonth() + 1}/${date.getDate()}`),
+      },
+      yAxis: {
+          type: "value",
+          name: "Temperature (°C)"
+      },
+      series: [{
+          name: "Temperature",
+          type: "bar",
+          data: temperatures
+      }]
+  };
+}
 export function generateBusinessesPerLocation(locations: Location[], businessList: Business[]): DataSet {
   const totalBusinessPerLocation: DataSet = {
     labels: [],
